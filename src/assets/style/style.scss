@@ -1,0 +1,73 @@
+$green: #16b13a;
+
+$black0: #333;
+$black1: #555;
+
+$gray0: #999;
+$gray1:#8c9399;
+$gray2: #e9e9e9;
+
+$white: #fff;
+$white2: #f2f2f2;
+$white3: #f7f7f7;
+
+$blue: #4782c4;
+$sky: #1d9ff9;
+
+$red: #f12b2b;
+
+
+* {
+    box-sizing: border-box;
+    list-style: none;
+    text-decoration: none;
+    margin: 0;
+}
+
+img {
+    width: 100%;
+}
+
+.content {
+    padding-bottom: 50px;
+    padding-top: 50px;
+}
+
+h3 {
+    font-size: 16px;
+    line-height: 1.3;
+    color: $black0;
+    margin-bottom: 4.8px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 400;
+}
+
+.blue-bd {
+    color: $blue;
+    border-color: $blue;
+}
+
+.green-bd {
+    color: $green;
+    border-color: $green;
+}
+
+.clearfix:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+}
+
+img.hide {
+    opacity: 0;
+}
+
+img.loaded {
+    opacity: 1;
+    transition: opacity .3s linear;
+}
