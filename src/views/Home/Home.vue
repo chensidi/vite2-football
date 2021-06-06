@@ -16,7 +16,6 @@
                     :key="menu.id"
                     :title="menu.label"
                 >
-                    {{ menu.label }}
                     <router-view v-slot="{ Component }">
                         <keep-alive>
                             <component :is="Component" />

@@ -14,9 +14,9 @@
             </van-tabs>
         </div>
         <!-- 球队积分榜 -->
-        <LeagueTable v-show="curType == 0" :standing="standing" />
+        <league-table v-show="curType == 0" :standing="standing" />
         <!-- 球员数据榜 -->
-        <div class="player-data" v-show="curType == 1">
+        <div class="player-data" v-show="curType == 1 || curType == 2">
             <aside>
                 <van-sidebar v-model="curCateIdx" @change="cateChange">
                     <van-sidebar-item 
@@ -27,25 +27,10 @@
                     />
                 </van-sidebar>
             </aside>
-            <div class="player-table">
-                <table class="cell_data">
-                    <tbody>
-                        <tr>
-                            <th>球员</th>
-                            <th>球队</th>
-                            <th>进球数</th>
-                        </tr>
-                        <tr v-for="item of playerLists" :key="item.person_id">
-                            <td>
-                                <img v-waitload="item.person_logo" alt="">
-                                {{ item.person_name }}
-                            </td>
-                            <td>{{ item.row_1 }}</td>
-                            <td>{{ item.count }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <player-table 
+                :playerLists="rankingList.list" 
+                :header="rankingList.header"
+            />
         </div>
     </div>
     <van-popup v-model:show="seasonObj.show" round position="bottom">
@@ -63,15 +48,16 @@ import { useStore } from 'vuex';
 import rankingsApi from '@/api/rankings';
 import { UILoading, UILoaded } from '@/utils/ui';
 
-const LeagueTable = defineAsyncComponent(() => import('./components/LeagueTable.vue'))
+const LeagueTable = defineAsyncComponent(() => import('./components/LeagueTable.vue'));
+const PlayerTable = defineAsyncComponent(() => import('./components/PlayerTable.vue'));
 
 export default defineComponent({
     components: {
-        LeagueTable
+        'league-table': LeagueTable,
+        'player-table': PlayerTable
     },
     setup() {
         const store = useStore();
-
         const rankings = store.getters.getRankings;
 
         //赛季选择器
@@ -88,7 +74,7 @@ export default defineComponent({
             seasonObj.show = false;
 
             //判断当前的排行数据类型 积分？球员榜？球队榜？
-            getStanding(seasonObj.seasonId);
+            judgeType();
         }
 
         //获取赛季历史
@@ -125,7 +111,7 @@ export default defineComponent({
         function leagueInit(competitionId: number | string) {
             getSeasons(competitionId).then(res => {
                 // 判断联赛类型 积分？球队榜？球员榜？
-                getStanding(res[0].season_id);
+                judgeType();
             })
         }
 
@@ -133,28 +119,42 @@ export default defineComponent({
         const curType: Ref<string|number> = ref('0'); //当前排行数据类别
         function typeChange(name: string | number, title: string) {
             curType.value = name;
-            switch (name) {
-                case '1':
-                    getCateByType();
-            }
+            curCateIdx.value = 0;
+            judgeType();
         }
 
-        //球员榜数据类别
+        //球员/球队榜数据类别
         const playerCates: Ref<Array<any>> = ref([]);
         const curCateIdx = ref(0);
-        const getCateByType = async () => {
-            const res = await rankingsApi.getCateByType(seasonObj.seasonId, 'person');
-            console.log(res);
+        const getCateByType = async (type: string = 'person') => {
+            const res = await rankingsApi.getCateByType(seasonObj.seasonId, type);
             playerCates.value = res.content.data;
-            getRankingByType();
+            getRankingByType(type);
         }
-        const playerLists = ref([]);
-        const getRankingByType = async () => {
-            const res = await rankingsApi.getRankingByType(playerCates.value[curCateIdx.value].type, seasonObj.seasonId, 'person_ranking');
-            playerLists.value = res.content.data;
+        const rankingList = reactive({
+            list: [],
+            header: []
+        })
+        const getRankingByType = async (type: string = 'person') => {
+            rankingList.list = [];
+            const res = await rankingsApi.getRankingByType(playerCates.value[curCateIdx.value].type, seasonObj.seasonId, type +'_ranking');
+            rankingList.list = res.content.data;
+            rankingList.header = res.content.header;
         }
         function cateChange(idx: number | string) {
-            getRankingByType();
+            const type = curType.value === '1' ? 'person' : 'team';
+            getRankingByType(type);
+        }
+
+        function judgeType() { //判断应该获取哪个类型的数据
+            switch (curType.value) {
+                case '0':
+                    return getStanding(seasonObj.seasonId);
+                case '1':
+                    return getCateByType();
+                case '2':
+                    return getCateByType('team');
+            }
         }
 
         leagueInit(rankings[0].competition_id);
@@ -169,8 +169,8 @@ export default defineComponent({
             curType,
             playerCates,
             curCateIdx,
-            playerLists,
-            cateChange
+            cateChange,
+            rankingList
         }
     },
 })
@@ -233,33 +233,5 @@ export default defineComponent({
         padding: 13px 9px;
         font-size: 12px;
         text-align: center;
-    }
-    .player-table {
-        margin-left: 90px;
-        height: 100%;
-        overflow: auto;
-        table {
-            width: 100%;
-            font-size: 12px;
-            text-align: left;
-            td {
-                    /* text-align: center; */
-                    height: 30px;
-                    /* font-size: .75rem; */
-                    line-height: 30px;
-                    /* text-align: center; */
-                    font-weight: 400;
-                    padding: 3px 0;
-                    /* border-bottom: 1px solid #ccc; */
-                    border-top: 1px solid #ddd;
-                    white-space: nowrap;
-                    box-sizing: border-box;
-                img {
-                    width: 20px;
-                    height: 20px;
-                    vertical-align: middle;
-                }
-            }
-        }
     }
 </style>
