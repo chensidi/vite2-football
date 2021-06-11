@@ -32,6 +32,30 @@
                 :header="rankingList.header"
             />
         </div>
+        <!-- 赛程 -->
+        <div v-if="curType == 3">
+            <div class="activeRound">
+                <span class="item">上一轮</span>
+                <span class="item">{{ filterRound(scheduleInfo.rounds) }}</span>
+                <span class="item">上一轮</span>
+            </div>
+            <table class="schedule-table">
+                <tbody>
+                    <tr v-for="item of scheduleInfo.matches" :key="item.match_id">
+                        <td>{{ item.start_play }}</td>
+                        <td class="team-a">
+                            {{ item.team_A_name }}
+                            <img :src="item.team_A_logo" alt="">
+                        </td>
+                        <td>{{item.score_A}} - {{item.score_B}}</td>
+                        <td class="team-b">
+                            <img :src="item.team_B_logo" alt="">
+                            {{ item.team_B_name }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
     <van-popup v-model:show="seasonObj.show" round position="bottom">
         <van-picker
@@ -46,6 +70,7 @@
 import { defineComponent, reactive, ref, defineAsyncComponent, Ref } from 'vue';
 import { useStore } from 'vuex';
 import rankingsApi from '@/api/rankings';
+import scheduleApi, { scheduleParams } from '@/api/schedule';
 import { UILoading, UILoaded } from '@/utils/ui';
 
 const LeagueTable = defineAsyncComponent(() => import('./components/LeagueTable.vue'));
@@ -154,7 +179,25 @@ export default defineComponent({
                     return getCateByType();
                 case '2':
                     return getCateByType('team');
+                case '3':
+                    return getSchedule({seasonId: seasonObj.seasonId})
             }
+        }
+
+        const scheduleInfo = reactive({
+            rounds: [],
+            matches: []
+        })
+        const getSchedule = async (params: scheduleParams) => { //获取赛程
+            const res =  await scheduleApi.getSchedule(params);
+            console.log(res);
+            scheduleInfo.rounds = res.content.rounds;
+            scheduleInfo.matches = res.content.matches;
+        }
+
+        function filterRound(roundArr: Array<any>) { //筛选当前轮数
+            const item = roundArr.find(item => item.current);
+            return item.name;
         }
 
         leagueInit(rankings[0].competition_id);
@@ -170,7 +213,9 @@ export default defineComponent({
             playerCates,
             curCateIdx,
             cateChange,
-            rankingList
+            rankingList,
+            scheduleInfo,
+            filterRound
         }
     },
 })
@@ -233,5 +278,44 @@ export default defineComponent({
         padding: 13px 9px;
         font-size: 12px;
         text-align: center;
+    }
+
+    .activeRound {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 5px;
+        .item {
+            flex: 1;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+            font-size: 14px;
+        }
+    }
+
+    .schedule-table {
+        width: 100%;
+        font-size: 12px;
+        background: $gray2;
+        img {
+            vertical-align: middle;
+            height: 20px;
+            display: inline-block;
+            width: auto;
+        }
+        .team-a{
+            text-align: right;
+            padding-right: 10px;
+        }
+        .team-b {
+            text-align: left;
+            padding-left: 10px;
+        }
+        td {
+            text-align: center;
+            padding: 5px 0;
+            border-bottom: 1px solid #ccc;
+        }
     }
 </style>
