@@ -14,3 +14,21 @@ export function setDirectives(app: App<Element>) {
         }
     })
 }
+
+export function setVisible(app: App<Element>) {
+    app.directive('visible', {
+        mounted(el: HTMLElement, binding: any) {
+            el.style.visibility = binding.value ? '' : 'hidden';
+        },
+        updated(el: HTMLElement, binding: any) {
+            el.style.visibility = binding.value ? '' : 'hidden';
+        }
+    })
+}
+
+export default {
+    install(app: App<Element>, options: any) {
+        setDirectives(app);
+        setVisible(app);
+    }
+}

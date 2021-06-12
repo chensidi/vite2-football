@@ -35,26 +35,11 @@
         <!-- 赛程 -->
         <div v-if="curType == 3">
             <div class="activeRound">
-                <span class="item">上一轮</span>
-                <span class="item">{{ filterRound(scheduleInfo.rounds) }}</span>
-                <span class="item">上一轮</span>
+                <span class="item" v-visible="hasRound(false)" @click="changeRound(false)"><van-icon name="arrow-left" class="round-cion" />上一轮</span>
+                <span class="item" @click="scheduleInfo.show = true">{{ filterRound(scheduleInfo.rounds) }} <van-icon class="round-cion" name="arrow-down" /></span>
+                <span class="item" v-visible="hasRound(true)" @click="changeRound(true)">下一轮<van-icon class="round-cion" name="arrow" /></span>
             </div>
-            <table class="schedule-table">
-                <tbody>
-                    <tr v-for="item of scheduleInfo.matches" :key="item.match_id">
-                        <td>{{ item.start_play }}</td>
-                        <td class="team-a">
-                            {{ item.team_A_name }}
-                            <img :src="item.team_A_logo" alt="">
-                        </td>
-                        <td>{{item.score_A}} - {{item.score_B}}</td>
-                        <td class="team-b">
-                            <img :src="item.team_B_logo" alt="">
-                            {{ item.team_B_name }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <schedule-table :matches="scheduleInfo.matches" />
         </div>
     </div>
     <van-popup v-model:show="seasonObj.show" round position="bottom">
@@ -62,6 +47,14 @@
             :columns="seasonObj.columns"
             @cancel="seasonObj.show = false"
             @confirm="onConfirm"
+        />
+    </van-popup>
+    <van-popup v-model:show="scheduleInfo.show" round position="bottom">
+        <van-picker
+            :columns="scheduleInfo.columns"
+            @cancel="scheduleInfo.show = false"
+            @confirm="confirmRound"
+            :default-index="scheduleInfo.index"
         />
     </van-popup>
 </template>
@@ -75,11 +68,13 @@ import { UILoading, UILoaded } from '@/utils/ui';
 
 const LeagueTable = defineAsyncComponent(() => import('./components/LeagueTable.vue'));
 const PlayerTable = defineAsyncComponent(() => import('./components/PlayerTable.vue'));
+const ScheduleTable = defineAsyncComponent(() => import('./components/ScheduleTable.vue'));
 
 export default defineComponent({
     components: {
         'league-table': LeagueTable,
-        'player-table': PlayerTable
+        'player-table': PlayerTable,
+        'schedule-table': ScheduleTable,
     },
     setup() {
         const store = useStore();
@@ -121,8 +116,10 @@ export default defineComponent({
         //获取积分
         const standing = ref([] as any);
         const getStanding = async (seasonId: string | number) => {
+            UILoading();
             const res = await rankingsApi.getStanding(seasonId);
-            standing.value = res.content.rounds[0].content.data;
+            standing.value = res?.content?.rounds[0]?.content?.data;
+            UILoaded(500);
         }
 
         //联赛改变
@@ -162,9 +159,11 @@ export default defineComponent({
         })
         const getRankingByType = async (type: string = 'person') => {
             rankingList.list = [];
+            UILoading();
             const res = await rankingsApi.getRankingByType(playerCates.value[curCateIdx.value].type, seasonObj.seasonId, type +'_ranking');
             rankingList.list = res.content.data;
             rankingList.header = res.content.header;
+            UILoaded(500);
         }
         function cateChange(idx: number | string) {
             const type = curType.value === '1' ? 'person' : 'team';
@@ -184,20 +183,80 @@ export default defineComponent({
             }
         }
 
-        const scheduleInfo = reactive({
+        const scheduleInfo: {
+            rounds: Array<any>,
+            matches: Array<any>,
+            show: boolean,
+            columns: Array<any>,
+            index: number
+        } = reactive({ //赛程信息
             rounds: [],
-            matches: []
+            matches: [],
+            show: false,
+            columns: [],
+            index: 0
         })
         const getSchedule = async (params: scheduleParams) => { //获取赛程
+            UILoading();
             const res =  await scheduleApi.getSchedule(params);
-            console.log(res);
             scheduleInfo.rounds = res.content.rounds;
             scheduleInfo.matches = res.content.matches;
+            scheduleInfo.columns = scheduleInfo.rounds.map((item, i) => {
+                return {
+                    text: item.name,
+                    val: i
+                };
+            })
+            UILoaded(500)
         }
 
         function filterRound(roundArr: Array<any>) { //筛选当前轮数
-            const item = roundArr.find(item => item.current);
-            return item.name;
+            const item = roundArr.find((item, i) => {
+                scheduleInfo.index = i;
+                return item.current;
+            });
+            return item?.name;
+        }
+
+        function confirmRound({text, val}: {text: string, val: number}) { //确定当前轮数
+            console.log(text, val);
+            scheduleInfo.index = val;
+            const target = scheduleInfo.rounds[val];
+            getSchedule({
+                seasonId: target.params.season_id,
+                roundId: target.params.round_id,
+                gameWeek: target.params.gameweek
+            })
+            scheduleInfo.show = false;
+        }
+
+        function hasRound(flag: boolean = true) { //判断是否有上一轮/下一轮
+            const idx = scheduleInfo.rounds.findIndex(item => item.current);
+            if (flag) { //下一轮
+                return idx < scheduleInfo.rounds.length - 1;
+            } else { //上一轮
+                return idx > 0;
+            }
+        }
+
+        function changeRound(flag: boolean = true) { //上/下轮切换
+            let idx = 1, target;
+            scheduleInfo.rounds.find((item, i, arr) => {
+                if (item.current) {
+                    idx = i;
+                    return i;
+                }
+            })
+            if (flag) {
+                target = scheduleInfo.rounds[idx + 1];
+            } else {
+                target = scheduleInfo.rounds[idx - 1];
+            }
+            getSchedule({
+                seasonId: target.params.season_id,
+                roundId: target.params.round_id,
+                gameWeek: target.params.gameweek
+            })
         }
 
         leagueInit(rankings[0].competition_id);
@@ -215,7 +274,10 @@ export default defineComponent({
             cateChange,
             rankingList,
             scheduleInfo,
-            filterRound
+            filterRound,
+            hasRound,
+            changeRound,
+            confirmRound,
         }
     },
 })
@@ -294,28 +356,7 @@ export default defineComponent({
         }
     }
 
-    .schedule-table {
-        width: 100%;
-        font-size: 12px;
-        background: $gray2;
-        img {
-            vertical-align: middle;
-            height: 20px;
-            display: inline-block;
-            width: auto;
-        }
-        .team-a{
-            text-align: right;
-            padding-right: 10px;
-        }
-        .team-b {
-            text-align: left;
-            padding-left: 10px;
-        }
-        td {
-            text-align: center;
-            padding: 5px 0;
-            border-bottom: 1px solid #ccc;
-        }
-    }
+    
+
+    
 </style>

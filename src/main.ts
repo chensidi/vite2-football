@@ -8,7 +8,7 @@ import VueLazyLoad from 'vue3-lazyload';
 import { Icon, Tab, Tabs, List, Popup, Picker, Sidebar, SidebarItem } from 'vant';
 
 import '@/utils/rem';
-import { setDirectives } from '@/utils/directives';
+import myDirectives from '@/utils/directives';
 
 fastClick(document.body);
 
@@ -29,7 +29,8 @@ app.use(VueLazyLoad)
     .use(Sidebar)
     .use(SidebarItem)
 
-setDirectives(app); //全局注册自定义指令
+app.use(myDirectives);
+
     
 
 
