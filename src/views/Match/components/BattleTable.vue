@@ -10,7 +10,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="(item, i) of battleLists" :key="item.date + i">
+            <tr v-for="(item, i) of props.battleLists" :key="item.date + i">
                 <td>{{ item.date }} <br> {{ item.year }}</td>
                 <td>{{ item.competition }}</td>
                 <td :class="getClass(1, item)">{{ item.team_A_name }}</td>
@@ -30,14 +30,16 @@ export default defineComponent({
     props: {
         battleLists: {
             type: Array,
-            default: []
+            default: function(): Array<any> {
+                return []
+            }
         },
         tag: {
             type: [Number, String],
             default: 0
         }
     },
-    setup(props) {
+    setup(props: any) {
         function computedClass(flag: number, item: any): string { //计算球队类名
             if (flag === 1) { // 表示左侧球队
                 if (item.main_team === 'team_A') { //主队
@@ -104,7 +106,8 @@ export default defineComponent({
         return {
             computedClass,
             getMainClass,
-            getClass
+            getClass,
+            props,
         }
     },
 })

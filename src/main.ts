@@ -5,7 +5,7 @@ import store from './store'
 import 'vant/lib/index.css';
 import fastClick from 'fastclick';
 import VueLazyLoad from 'vue3-lazyload';
-import { Icon, Tab, Tabs, List, Popup, Picker, Sidebar, SidebarItem } from 'vant';
+import { Icon, Tab, Tabs, List, Popup, Picker, Sidebar, SidebarItem, Lazyload } from 'vant';
 
 import '@/utils/rem';
 import myDirectives from '@/utils/directives';

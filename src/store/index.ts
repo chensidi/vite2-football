@@ -8,7 +8,8 @@ interface state {
     matchRouteRecord: string,
     activeName: string,
     matchMenu: Array<any> | null,
-    rankings: Array<any> | null
+    rankings: Array<any> | null,
+    showTabbar: boolean
 }
 
 const state: state = {
@@ -16,7 +17,8 @@ const state: state = {
     matchRouteRecord: '/match',
     activeName: '首页',
     matchMenu: null,
-    rankings: null
+    rankings: null,
+    showTabbar: true
 }
 
 const mutations = {
@@ -38,6 +40,10 @@ const mutations = {
     setRankings(state: state, rankingArr: any[]) {
         state.rankings = rankingArr;
         sessionStore.set('rankings', rankingArr);
+    },
+    setShowTab(state: state, show: boolean) {
+        state.showTabbar = show;
+        sessionStore.set('showTabbar', show);
     }
 }
 
@@ -56,6 +62,9 @@ const actions = {
     },
     setRankings({commit}: ActionContext<state, state>, rankingArr: any[]) {
         commit('setRankings', rankingArr);
+    },
+    setShowTab({commit}: ActionContext<state, state>, show: boolean) {
+        commit('setShowTab', show)
     },
     async getMenusData({commit}: ActionContext<state, state>) {
         const data = await homeApi.getMenu();
@@ -78,6 +87,9 @@ const getters = {
     getRankings(state: state) {
         return state.rankings || sessionStore.get('rankings')
     },
+    getShowTab(state: state) {
+        return state.showTabbar;
+    }
 }
 
 interface customInf {

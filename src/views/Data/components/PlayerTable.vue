@@ -3,10 +3,10 @@
         <table class="cell_data">
             <tbody>
                 <tr>
-                    <th v-for="item of header" :key="item">{{ item }}</th>
+                    <th v-for="item of props.header" :key="item">{{ item }}</th>
                 </tr>
-                <tr v-for="item of playerLists" :key="item.person_id">
-                    <template v-if="header.length === 3">
+                <tr v-for="(item) of props.playerLists" :key="item.person_id">
+                    <template v-if="props.header.length === 3">
                         <td class="player-name van-ellipsis">
                             {{ item.rank }}
                             <img v-waitload="item.person_logo" alt="">
@@ -30,21 +30,32 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from 'vue';
+
+interface propsShape {
+    header: Array<any>,
+    playerLists: Array<any>
+}
 
 export default defineComponent({
     props: {
         header: {
             type: Array,
-            default: []
+            default: function(): Array<any> {
+                return [];
+            }
         },
         playerLists: {
             type: Array,
-            default: []
+            default: function(): Array<any> {
+                return [];
+            }
         }
     },
-    setup() {
-        
+    setup(props: propsShape) {
+        return {
+            props
+        }
     },
 })
 </script>

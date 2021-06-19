@@ -81,10 +81,17 @@ const router = createRouter({
     routes: routes
 })
 
+const showTabPaths = ['Home', 'Live', 'Data', 'Match', 'News', 'MatchList']
 router.afterEach((to, from) => {
     let title: string = <string>to.meta.title;
     document.title = title;
     store.dispatch('setActive', title);
+    console.log(to)
+    if (showTabPaths.find(item => to.name === item)) {
+        store.dispatch('setShowTab', true);
+    } else {
+        store.dispatch('setShowTab', false);
+    }
 })
 
 export default router;

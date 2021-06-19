@@ -48,7 +48,11 @@
                 refreshing: false,
             });
 
-            const listsObj = reactive({
+            const listsObj: {
+                list: Array<any>,
+                nextDate: string,
+                prevDate: string
+            } = reactive({
                 list: [],
                 nextDate: '',
                 prevDate: ''

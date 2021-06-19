@@ -1,6 +1,6 @@
 <template>
     <div class="content">
-        <van-tabs v-model:active="active" @change="leagueChange">
+        <van-tabs @change="leagueChange">
             <van-tab :name="item.competition_id" :title="item.label" v-for="item of rankings" :key="item.competition_id">
             </van-tab>
         </van-tabs>
@@ -355,8 +355,4 @@ export default defineComponent({
             font-size: 14px;
         }
     }
-
-    
-
-    
 </style>

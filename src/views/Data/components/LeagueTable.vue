@@ -11,7 +11,7 @@
                 <th>进/失</th>
                 <th>积分</th>
             </tr>
-            <tr v-for="item of standing" :key="item.team_id">
+            <tr v-for="item of props.standing" :key="item.team_id">
                 <th>{{ item.rank }}</th>
                 <th class="team">
                     <img v-waitload="item.team_logo" alt="">
@@ -29,17 +29,25 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from 'vue';
+
+interface propsShape {
+   standing: Array<any> 
+}
 
 export default defineComponent({
     props: {
         standing: {
             type: Array,
-            default: []
+            default: function(): Array<any> {
+                return []
+            }
         }
     },
-    setup() {
-        
+    setup(props: propsShape) {
+        return {
+            props
+        }
     },
 })
 </script>

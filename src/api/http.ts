@@ -1,5 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 
+const isDev = process.env.NODE_ENV === 'development';
+
 class Http {
     instance: AxiosInstance = {} as AxiosInstance;
     constructor() {
@@ -8,7 +10,7 @@ class Http {
     init() {
         // 创建 axios 实例
         this.instance = axios.create({
-            baseURL: '/api',
+            baseURL: isDev ? '/api' : 'http://zhoup.top:8089/api',
             timeout: 10000 // 请求超时时间
         })
         // 拦截器配置---------------------------------------------------------------------------------------------------------------

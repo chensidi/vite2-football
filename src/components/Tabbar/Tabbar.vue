@@ -1,5 +1,5 @@
 <template>
-    <van-tabbar active-color="#16b13a" v-model="active">
+    <van-tabbar class="my-tabbar" active-color="#16b13a" v-model="active">
         <van-tabbar-item 
             :icon="item.icon"
             v-for="item of menuList"
@@ -48,3 +48,7 @@ export default defineComponent({
     },
 })
 </script>
+
+<style lang="scss" scoped>
+   
+</style>

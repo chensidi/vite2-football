@@ -36,12 +36,15 @@ import NewsItem from './NewsItem.vue'
 import homeApi from '@/api/home'
 import { pageData } from '@/api/home'
 
-interface NewsItem {
+interface NewsItemShape {
     id: number,
     thumb: string,
     title: string,
     comments_total: number,
-    showcontent: string
+    showcontent: string,
+    author_classify: string,
+    top: boolean | undefined,
+    label: string,
 }
 
 export default defineComponent({
@@ -52,7 +55,7 @@ export default defineComponent({
         [PullRefresh.name]: PullRefresh,
     },
     setup() {
-        const lists = ref<Array<NewsItem>>([])
+        const lists = ref<Array<NewsItemShape>>([])
         const state = reactive({
             loading: false,
             finished: false,
@@ -68,7 +71,7 @@ export default defineComponent({
 
         async function getContentList(idx: string | number) {
             const data = await homeApi.getContentList(idx);
-            const articles: Array<NewsItem> = data.articles
+            const articles: Array<NewsItemShape> = data.articles
             lists.value = articles.filter(item => {
                 return item.thumb !== ''
             })
@@ -81,7 +84,7 @@ export default defineComponent({
         async function getPageData(id: number|string) { //分页
             pageInfo.tabId = id;
             const data = await homeApi.getPageData(pageInfo);
-            let articles: Array<NewsItem> = data.articles;
+            let articles: Array<NewsItemShape> = data.articles;
             console.log(articles)
             articles = articles.filter(item => {
                 return item.thumb !== ''
@@ -116,7 +119,7 @@ export default defineComponent({
         async function refresh() { //刷新处理函数
             const id = route.params.id;
             const data = await homeApi.refresh(id as string);
-            const articles: Array<NewsItem> = data.articles;
+            const articles: Array<NewsItemShape> = data.articles;
             lists.value = articles;
             pageInfo.after = data.min;
             pageInfo.page = data.page + 1;

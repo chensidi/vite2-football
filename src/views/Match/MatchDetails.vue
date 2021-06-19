@@ -1,11 +1,11 @@
 <template>
     <section class="details-wrap" v-cloak>
         <match-bg 
-            :teamA="teamA"
-            :teamB="teamB"
-            :matchTime="matchTime"
-            :competition="competition"
-            :status="status"
+            :teamA="bgInfo.teamA"
+            :teamB="bgInfo.teamB"
+            :matchTime="bgInfo.matchTime"
+            :competition="bgInfo.competition"
+            :status="bgInfo.status"
         />
         <van-tabs 
             v-model:active="active" 
@@ -23,8 +23,8 @@
                     事件
                 </h3>
                 <event-title 
-                    :teamA="teamA" 
-                    :teamB="teamB" 
+                    :teamA="bgInfo.teamA" 
+                    :teamB="bgInfo.teamB" 
                 />
                 <match-line :events="events" />
                 <div class="event-logo">
@@ -53,8 +53,8 @@
                     技术统计
                 </h3>
                 <event-title 
-                    :teamA="teamA" 
-                    :teamB="teamB" 
+                    :teamA="bgInfo.teamA" 
+                    :teamB="bgInfo.teamB" 
                 />
                 <div class="count-main">
                     <data-percent 
@@ -137,16 +137,16 @@
                     联赛积分榜
                 </h3>
                 <div class="analysis-team">
-                    <img :src="teamA.logo" alt="">
-                    {{ teamA.name }}
+                    <img :src="bgInfo.teamA.logo" alt="">
+                    {{ bgInfo.teamA.name }}
                 </div>
                 <rank-table :lists="rankA"></rank-table>
                 </section>
 
                 <section v-if="rankB.length">
                 <div class="analysis-team">
-                    <img :src="teamB.logo" alt="">
-                    {{ teamB.name }}
+                    <img :src="bgInfo.teamB.logo" alt="">
+                    {{ bgInfo.teamB.name }}
                 </div>
                 <rank-table :lists="rankB"></rank-table>
                 </section>
@@ -155,16 +155,16 @@
                     近期战绩
                 </h3>
                 <div class="analysis-team">
-                    <img :src="teamA.logo" alt="">
-                    {{ teamA.name }}
+                    <img :src="bgInfo.teamA.logo" alt="">
+                    {{ bgInfo.teamA.name }}
                 </div>
                 <battle-table 
                     :battleLists="historyA"
                     tag="1"
                 />
                 <div class="analysis-team">
-                    <img :src="teamB.logo" alt="">
-                    {{ teamB.name }}
+                    <img :src="bgInfo.teamB.logo" alt="">
+                    {{ bgInfo.teamB.name }}
                 </div>
                 <battle-table 
                     :battleLists="historyB"
@@ -238,7 +238,7 @@ export default defineComponent({
             UILoaded(500);
         }
 
-        const [lineup, sub] = [ref([] as Array<any>), ref([])]; //首发&替补
+        const [lineup, sub] = [ref([] as Array<any>), ref([] as Array<any>)]; //首发&替补
         const getLineup = async () => { //获取阵容
             const res = await matchApi.getLineup(route.params.id as string);
             try {
@@ -323,7 +323,10 @@ export default defineComponent({
             })
         }
 
-        const hightLights = reactive({
+        const hightLights: {
+            video: null | string,
+            gifs: Array<any>
+        } = reactive({
             video: null,
             gifs: []
         })
@@ -343,11 +346,13 @@ export default defineComponent({
             list,
             events,
             ...toRefs(bgInfo),
+            bgInfo,
             statistics,
             relatedNews,
             lineup,
             sub,
             ...toRefs(battleData),
+            battleData,
             ...toRefs(hightLights)
         }
     },
@@ -370,7 +375,7 @@ export default defineComponent({
     .details-wrap {
         padding: {
             top: 50px;
-            bottom: 50px;
+            // bottom: 50px;
         }
     }
 
