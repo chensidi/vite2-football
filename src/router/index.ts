@@ -29,7 +29,7 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/Live/Live.vue'),
         name: 'Live',
         meta: {
-            title: '直播'
+            title: '视频'
         }
     },
     {
@@ -86,7 +86,6 @@ router.afterEach((to, from) => {
     let title: string = <string>to.meta.title;
     document.title = title;
     store.dispatch('setActive', title);
-    console.log(to)
     if (showTabPaths.find(item => to.name === item)) {
         store.dispatch('setShowTab', true);
     } else {

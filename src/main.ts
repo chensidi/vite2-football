@@ -29,6 +29,7 @@ app.use(VueLazyLoad)
     .use(Sidebar)
     .use(SidebarItem)
 
+//自定义指令
 app.use(myDirectives);
 
     

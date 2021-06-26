@@ -15,7 +15,7 @@ const menuList: Array<menuItem> = [
     {
         to: '/live',
         icon: 'play-circle-o',
-        name: '直播',
+        name: '视频',
         path: 'Live'
     },
     {

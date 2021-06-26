@@ -34,7 +34,6 @@ export default defineComponent({
 
         const getLeagueVideo = async () => {
             const res = await videoApi.getLeagueVideo({league: 'England', after: loadObj.after});
-            console.log(res);
             loadObj.after = res.min;
             setTimeout(() => {
                 lists.value =  lists.value.concat(res.articles);
