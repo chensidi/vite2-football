@@ -9,7 +9,8 @@ interface state {
     activeName: string,
     matchMenu: Array<any> | null,
     rankings: Array<any> | null,
-    showTabbar: boolean
+    showTabbar: boolean,
+    showHead: boolean
 }
 
 const state: state = {
@@ -18,7 +19,8 @@ const state: state = {
     activeName: '首页',
     matchMenu: null,
     rankings: null,
-    showTabbar: true
+    showTabbar: true,
+    showHead: true
 }
 
 const mutations = {
@@ -44,6 +46,10 @@ const mutations = {
     setShowTab(state: state, show: boolean) {
         state.showTabbar = show;
         sessionStore.set('showTabbar', show);
+    },
+    setShowHead(state: state, show: boolean) {
+        state.showHead = show;
+        sessionStore.set('setShowHead', show);
     }
 }
 
@@ -71,6 +77,9 @@ const actions = {
         commit('setMatchMenu', data.menus.match_tab);
         commit('setRankings', data.menus.ranking_new);
         return data;
+    },
+    setShowHead({commit}: ActionContext<state, state>, show: boolean) {
+        commit('setShowHead', show);
     }
 }
 
@@ -89,6 +98,9 @@ const getters = {
     },
     getShowTab(state: state) {
         return state.showTabbar;
+    },
+    getShowHead(state: state) {
+        return state.showHead;
     }
 }
 

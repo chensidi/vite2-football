@@ -1,5 +1,5 @@
 <template>
-  <Header />
+  <Header v-show="showHead" />
   <router-view v-slot="{ Component }">
     <keep-alive :include="['Home', 'Match', 'Live']">
       <component :is="Component" />
@@ -25,8 +25,11 @@ export default defineComponent({
     const store = useStore();
 
     const showTabbar = computed(() => store.getters.getShowTab);
+    const showHead = computed(() => store.getters.getShowHead);
+
     return {
-      showTabbar
+      showTabbar,
+      showHead,
     }
   }
 })

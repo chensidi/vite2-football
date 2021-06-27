@@ -91,6 +91,12 @@ router.afterEach((to, from) => {
     } else {
         store.dispatch('setShowTab', false);
     }
+
+    if (to.name === 'Article') {
+        store.dispatch('setShowHead', false);
+    } else {
+        store.dispatch('setShowHead', true);
+    }
 })
 
 export default router;

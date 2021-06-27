@@ -1,6 +1,8 @@
 # vite2 + typescript + vue3.0 重构足球App移动端
 
 ## 预览地址 [Jacky懂⚽帝 http://zhoup.top:7005/dist](http://zhoup.top:7005/football)
+### [github地址 https://github.com/chensidi/vite2-football](https://github.com/chensidi/vite2-football)
+### [gitee地址 https://gitee.com/chensidi/vite2-football](https://gitee.com/chensidi/vite2-football)
 > 备注：由于没有UI图，所以只能自己脑补结合官方的UI和app的UI作为参考，请大家谅解🤣😂😥，当然在这里希望各位使用正规官方应用，此项目目的是为了体验一把目前新兴的前端技术框架，大家看球直接去懂球帝哈！
 
 ## 背景

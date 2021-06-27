@@ -19,8 +19,9 @@ export default defineComponent({
     setup() {
         const route = useRoute();
         const { id } = route.params;
-        const url = `https://m.dongqiudi.net/article/${id}.html`
-
+        // const url = `https://m.dongqiudi.net/article/${id}.html`;
+        const url = `https://api.dongqiudi.com/article/${id}.html`;
+        
         function loaded() {
             console.log('laoded')
             Toast.clear()
