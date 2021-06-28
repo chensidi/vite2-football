@@ -1,7 +1,7 @@
 <template>
   <Header v-show="showHead" />
   <router-view v-slot="{ Component }">
-    <keep-alive :include="['Home', 'Match', 'Live']">
+    <keep-alive :include="['Home', 'Match', 'Live', 'Data']">
       <component :is="Component" />
     </keep-alive>
   </router-view>

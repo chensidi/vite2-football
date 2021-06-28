@@ -73,6 +73,14 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
             title: '比赛'
         } 
+    },
+    {
+        path: '/person/:id',
+        component: () => import('@/views/Person/Person.vue'),
+        name: 'Person',
+        meta: {
+            title: '球员信息'
+        } 
     }
 ]
 
@@ -81,7 +89,8 @@ const router = createRouter({
     routes: routes
 })
 
-const showTabPaths = ['Home', 'Live', 'Data', 'Match', 'News', 'MatchList']
+const showTabPaths = ['Home', 'Live', 'Data', 'Match', 'News', 'MatchList'];
+const hideHeadName = ['Article', 'Person']
 router.afterEach((to, from) => {
     let title: string = <string>to.meta.title;
     document.title = title;
@@ -92,7 +101,7 @@ router.afterEach((to, from) => {
         store.dispatch('setShowTab', false);
     }
 
-    if (to.name === 'Article') {
+    if (hideHeadName.includes(to.name as string)) {
         store.dispatch('setShowHead', false);
     } else {
         store.dispatch('setShowHead', true);

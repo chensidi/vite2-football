@@ -8,9 +8,11 @@
                 <tr v-for="(item) of props.playerLists" :key="item.person_id">
                     <template v-if="props.header.length === 3">
                         <td class="player-name van-ellipsis">
-                            {{ item.rank }}
-                            <img v-waitload="item.person_logo" alt="">
-                            {{ item.person_name }}
+                            <router-link :to="{name: 'Person', params: {id: item.person_id}}">
+                                {{ item.rank }}
+                                    <img v-waitload="item.person_logo" alt="">
+                                {{ item.person_name }}
+                            </router-link>
                         </td>
                         <td>{{ item.row_1 }}</td>
                         <td>{{ item.count }}</td>

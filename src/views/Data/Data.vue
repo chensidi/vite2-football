@@ -71,6 +71,7 @@ const PlayerTable = defineAsyncComponent(() => import('./components/PlayerTable.
 const ScheduleTable = defineAsyncComponent(() => import('./components/ScheduleTable.vue'));
 
 export default defineComponent({
+    name: 'Data',
     components: {
         'league-table': LeagueTable,
         'player-table': PlayerTable,

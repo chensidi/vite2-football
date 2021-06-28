@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
+    "echarts": "^5.1.2",
     "fastclick": "^1.0.6",
     "vant": "^3.0.10",
     "vue": "^3.0.5",
