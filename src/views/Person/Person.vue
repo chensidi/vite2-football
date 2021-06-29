@@ -21,8 +21,45 @@
         </div>
         <div>
             <div class="charts" id="charts">
-
             </div>
+            <van-grid :column-num="2" class="my-grid">
+                <van-grid-item>
+                    <span>惯用脚</span>
+                    <img :src="skillInfo.useFootImg" alt="">
+                </van-grid-item>
+                <van-grid-item>
+                    <span>
+                        国际声望
+                    </span>
+                    <van-rate
+                        v-model="skillInfo.countryKnown"
+                        :size="20"
+                        color="#ffd21e"
+                        void-icon="star"
+                        void-color="#eee"
+                    />
+                </van-grid-item>
+                <van-grid-item>
+                    <span>逆足能力</span>
+                    <van-rate
+                        v-model="skillInfo.uselessFoot"
+                        :size="20"
+                        color="#ffd21e"
+                        void-icon="star"
+                        void-color="#eee"
+                    />
+                </van-grid-item>
+                <van-grid-item>
+                    <span>花式技巧</span>
+                    <van-rate
+                        v-model="skillInfo.showSkill"
+                        :size="20"
+                        color="#ffd21e"
+                        void-icon="star"
+                        void-color="#eee"
+                    />
+                </van-grid-item>
+            </van-grid>
         </div>
     </div>
 </template>
@@ -50,6 +87,13 @@ interface bgInfoShape {
     useFoot?: string
 }
 
+interface skillShap {
+    useFootImg?: string,
+    countryKnown?: number,
+    uselessFoot?: number,
+    showSkill?: number,
+}
+
 export default defineComponent({
     setup() {
 
@@ -57,6 +101,7 @@ export default defineComponent({
         const { back } = useRouter();
 
         const bgInfo: bgInfoShape = reactive({}); //背景信息
+        const skillInfo:skillShap = reactive({}); //技巧能力
         const getPersonInfo = async () => {
             const res = await personApi.getPersonInfo(id as string);
             console.log(res);
@@ -74,6 +119,10 @@ export default defineComponent({
             bgInfo.position = res.basicInfo.otherInfo.position;
             bgInfo.useFoot = res.basicInfo.otherInfo.useFoot;
 
+            skillInfo.useFootImg = res.desc.useFootImg;
+            skillInfo.showSkill = res.desc.showSkill;
+            skillInfo.uselessFoot = res.desc.uselessFoot;
+            skillInfo.countryKnown = res.desc.countryKnown;
             drawCharts(res.chartInfo);
         }
 
@@ -144,9 +193,6 @@ export default defineComponent({
                         // 坐标轴线线的类型。
                     }
                 } */
-                
-                
-                
             }
             option && myChart.setOption(option);
         }
@@ -155,7 +201,8 @@ export default defineComponent({
 
         return {
             bgInfo,
-            back
+            back,
+            skillInfo
         }
     },
 })
@@ -225,5 +272,20 @@ export default defineComponent({
     .charts {
         width: 100%;
         height: 250px;
+    }
+
+    .my-grid {
+        font-size: 14px;
+        img {
+            width: 30%;
+        }
+        span {
+            color: $black1;
+            position: absolute;
+            top: 0;
+        }
+        & :deep .van-grid-item__content {
+            padding: 20px 8px;
+        }
     }
 </style>

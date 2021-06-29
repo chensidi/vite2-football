@@ -1,4 +1,5 @@
 <template>
+    <keep-alive>
     <div class="content">
         <van-tabs @change="leagueChange">
             <van-tab :name="item.competition_id" :title="item.label" v-for="item of rankings" :key="item.competition_id">
@@ -42,6 +43,7 @@
             <schedule-table :matches="scheduleInfo.matches" />
         </div>
     </div>
+    </keep-alive>
     <van-popup v-model:show="seasonObj.show" round position="bottom">
         <van-picker
             :columns="seasonObj.columns"
@@ -260,7 +262,7 @@ export default defineComponent({
             })
         }
 
-        leagueInit(rankings[0].competition_id);
+        // leagueInit(rankings[0].competition_id);
 
         return {
             rankings,

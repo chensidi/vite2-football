@@ -162,7 +162,7 @@
   resolved "https://registry.npm.taobao.org/@babel/parser/download/@babel/parser-7.13.13.tgz?cache=0&sync_timestamp=1616794141605&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40babel%2Fparser%2Fdownload%2F%40babel%2Fparser-7.13.13.tgz#42f03862f4aed50461e543270916b47dd501f0df"
   integrity sha1-QvA4YvSu1QRh5UMnCRa0fdUB8N8=
 
-"@babel/runtime@7.x", "@babel/runtime@^7.0.0":
+"@babel/runtime@^7.0.0":
   version "7.13.10"
   resolved "https://registry.npm.taobao.org/@babel/runtime/download/@babel/runtime-7.13.10.tgz?cache=0&sync_timestamp=1615243220467&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40babel%2Fruntime%2Fdownload%2F%40babel%2Fruntime-7.13.10.tgz#47d42a57b6095f4468da440388fdbad8bebf0d7d"
   integrity sha1-R9QqV7YJX0Ro2kQDiP262L6/DX0=
@@ -201,9 +201,9 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@popperjs/core@^2.5.4":
+"@popperjs/core@^2.9.2":
   version "2.9.2"
-  resolved "https://registry.npm.taobao.org/@popperjs/core/download/@popperjs/core-2.9.2.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40popperjs%2Fcore%2Fdownload%2F%40popperjs%2Fcore-2.9.2.tgz#adea7b6953cbb34651766b0548468e743c6a2353"
+  resolved "https://registry.npm.taobao.org/@popperjs/core/download/@popperjs/core-2.9.2.tgz?cache=0&sync_timestamp=1617291042068&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40popperjs%2Fcore%2Fdownload%2F%40popperjs%2Fcore-2.9.2.tgz#adea7b6953cbb34651766b0548468e743c6a2353"
   integrity sha1-rep7aVPLs0ZRdmsFSEaOdDxqI1M=
 
 "@types/node@^14.14.35":
@@ -211,29 +211,27 @@
   resolved "https://registry.npm.taobao.org/@types/node/download/@types/node-14.14.37.tgz?cache=0&sync_timestamp=1616803743750&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Fnode%2Fdownload%2F%40types%2Fnode-14.14.37.tgz#a3dd8da4eb84a996c36e331df98d82abd76b516e"
   integrity sha1-o92NpOuEqZbDbjMd+Y2Cq9drUW4=
 
-"@vant/icons@^1.5.3":
-  version "1.5.3"
-  resolved "https://registry.npm.taobao.org/@vant/icons/download/@vant/icons-1.5.3.tgz?cache=0&sync_timestamp=1613997600593&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40vant%2Ficons%2Fdownload%2F%40vant%2Ficons-1.5.3.tgz#b7779f67bf608d417a82452fbede406dfa46b439"
-  integrity sha1-t3efZ79gjUF6gkUvvt5AbfpGtDk=
+"@vant/icons@^1.6.0":
+  version "1.6.0"
+  resolved "https://registry.nlark.com/@vant/icons/download/@vant/icons-1.6.0.tgz#3db7eb7f963f51a2a08676720d5af9c4c3512feb"
+  integrity sha1-Pbfrf5Y/UaKghnZyDVr5xMNRL+s=
 
-"@vant/lazyload@^1.0.4":
-  version "1.0.4"
-  resolved "https://registry.npm.taobao.org/@vant/lazyload/download/@vant/lazyload-1.0.4.tgz#f1bbd81217cf416a377ab2f928f2a147a4489259"
-  integrity sha1-8bvYEhfPQWo3erL5KPKhR6RIklk=
+"@vant/lazyload@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.nlark.com/@vant/lazyload/download/@vant/lazyload-1.2.0.tgz?cache=0&sync_timestamp=1620007499934&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40vant%2Flazyload%2Fdownload%2F%40vant%2Flazyload-1.2.0.tgz#62e9779bd7844ad8f71c2ca2bf852e6147c7a86d"
+  integrity sha1-Yul3m9eEStj3HCyiv4UuYUfHqG0=
 
-"@vant/popperjs@^1.0.4":
-  version "1.0.4"
-  resolved "https://registry.npm.taobao.org/@vant/popperjs/download/@vant/popperjs-1.0.4.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40vant%2Fpopperjs%2Fdownload%2F%40vant%2Fpopperjs-1.0.4.tgz#49c20809a3828e7b036e23d50fb56121e997618f"
-  integrity sha1-ScIICaOCjnsDbiPVD7VhIemXYY8=
+"@vant/popperjs@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.npm.taobao.org/@vant/popperjs/download/@vant/popperjs-1.1.0.tgz?cache=0&sync_timestamp=1617713442527&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40vant%2Fpopperjs%2Fdownload%2F%40vant%2Fpopperjs-1.1.0.tgz#b4edee5bbfa6fb18705986e313d4fd5f17942a0f"
+  integrity sha1-tO3uW7+m+xhwWYbjE9T9XxeUKg8=
   dependencies:
-    "@popperjs/core" "^2.5.4"
+    "@popperjs/core" "^2.9.2"
 
-"@vant/use@^1.0.5":
-  version "1.0.5"
-  resolved "https://registry.npm.taobao.org/@vant/use/download/@vant/use-1.0.5.tgz#44bee952ebccf9396414a51c4d4b458434a9de23"
-  integrity sha1-RL7pUuvM+TlkFKUcTUtFhDSp3iM=
-  dependencies:
-    "@babel/runtime" "7.x"
+"@vant/use@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.nlark.com/@vant/use/download/@vant/use-1.1.2.tgz?cache=0&sync_timestamp=1619093566753&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40vant%2Fuse%2Fdownload%2F%40vant%2Fuse-1.1.2.tgz#d35265e05df88a47b04196a308efb5e89e44ca10"
+  integrity sha1-01Jl4F34ikewQZajCO+16J5EyhA=
 
 "@vitejs/plugin-vue@^1.1.5":
   version "1.2.1"
@@ -1184,16 +1182,15 @@ util-deprecate@^1.0.2, util-deprecate@~1.0.1:
   resolved "https://registry.npm.taobao.org/util-deprecate/download/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
   integrity sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=
 
-vant@^3.0.10:
-  version "3.0.11"
-  resolved "https://registry.npm.taobao.org/vant/download/vant-3.0.11.tgz?cache=0&sync_timestamp=1617070186940&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fvant%2Fdownload%2Fvant-3.0.11.tgz#afb4d2d61037fc85218189e91a491ec830896c85"
-  integrity sha1-r7TS1hA3/IUhgYnpGkkeyDCJbIU=
+vant@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.nlark.com/vant/download/vant-3.1.1.tgz#fde47e743069147de9330d3558e89d11442572b9"
+  integrity sha1-/eR+dDBpFH3pMw01WOidEUQlcrk=
   dependencies:
-    "@babel/runtime" "7.x"
-    "@vant/icons" "^1.5.3"
-    "@vant/lazyload" "^1.0.4"
-    "@vant/popperjs" "^1.0.4"
-    "@vant/use" "^1.0.5"
+    "@vant/icons" "^1.6.0"
+    "@vant/lazyload" "^1.2.0"
+    "@vant/popperjs" "^1.1.0"
+    "@vant/use" "^1.1.2"
 
 vite-plugin-imp@^2.0.4:
   version "2.0.5"

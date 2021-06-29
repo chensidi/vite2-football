@@ -5,7 +5,7 @@ import store from './store'
 import 'vant/lib/index.css';
 import fastClick from 'fastclick';
 import VueLazyLoad from 'vue3-lazyload';
-import { Icon, Tab, Tabs, List, Popup, Picker, Sidebar, SidebarItem, Lazyload } from 'vant';
+import { Icon, Tab, Tabs, List, Popup, Picker, Sidebar, SidebarItem, Grid, GridItem, Rate } from 'vant';
 
 import '@/utils/rem';
 import myDirectives from '@/utils/directives';
@@ -28,6 +28,9 @@ app.use(VueLazyLoad)
     .use(Picker)
     .use(Sidebar)
     .use(SidebarItem)
+    .use(Grid)
+    .use(GridItem)
+    .use(Rate)
 
 //自定义指令
 app.use(myDirectives);

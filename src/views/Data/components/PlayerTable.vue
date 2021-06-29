@@ -87,6 +87,9 @@ export default defineComponent({
             }
             .player-name {
                 max-width: 8em;
+                a {
+                    color: $black1;
+                }
             }
         }
     }

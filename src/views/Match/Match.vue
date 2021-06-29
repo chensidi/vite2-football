@@ -35,6 +35,7 @@ import { useRouter, onBeforeRouteLeave } from 'vue-router'
 export default defineComponent({
     name: 'Match',
     setup() {
+        console.log('22')
         const store = useStore();
         const menus = store.getters.getMatchMenus;
         const active = ref<number>(0); //激活菜单下标
