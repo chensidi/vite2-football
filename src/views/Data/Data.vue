@@ -62,11 +62,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, defineAsyncComponent, Ref } from 'vue';
+import { defineComponent, reactive, ref, defineAsyncComponent, Ref, nextTick } from 'vue';
 import { useStore } from 'vuex';
 import rankingsApi from '@/api/rankings';
 import scheduleApi, { scheduleParams } from '@/api/schedule';
 import { UILoading, UILoaded } from '@/utils/ui';
+import { onBeforeRouteLeave } from 'vue-router';
 
 const LeagueTable = defineAsyncComponent(() => import('./components/LeagueTable.vue'));
 const PlayerTable = defineAsyncComponent(() => import('./components/PlayerTable.vue'));
@@ -82,7 +83,7 @@ export default defineComponent({
     setup() {
         const store = useStore();
         const rankings = store.getters.getRankings;
-
+        console.log('go')
         //赛季选择器
         const seasonObj = reactive({
             seasonId: '',
@@ -125,8 +126,14 @@ export default defineComponent({
             UILoaded(500);
         }
 
+        let key = false;
+        onBeforeRouteLeave(() => {key = true})
         //联赛改变
         function leagueChange(name: string | number, title: string) {
+            if (key) {
+                key = false;
+                return;
+            }
             UILoading();
             leagueInit(name);
             UILoaded(500);
@@ -134,6 +141,7 @@ export default defineComponent({
 
         //联赛排行初始化
         function leagueInit(competitionId: number | string) {
+            console.log(0)
             getSeasons(competitionId).then(res => {
                 // 判断联赛类型 积分？球队榜？球员榜？
                 judgeType();
@@ -143,6 +151,11 @@ export default defineComponent({
         //数据排行tab切换
         const curType: Ref<string|number> = ref('0'); //当前排行数据类别
         function typeChange(name: string | number, title: string) {
+            console.log(2)
+            if (key) {
+                key = false;
+                return;
+            }
             curType.value = name;
             curCateIdx.value = 0;
             judgeType();
@@ -169,6 +182,7 @@ export default defineComponent({
             UILoaded(500);
         }
         function cateChange(idx: number | string) {
+            console.log(3)
             const type = curType.value === '1' ? 'person' : 'team';
             getRankingByType(type);
         }
@@ -242,7 +256,7 @@ export default defineComponent({
             }
         }
 
-        function changeRound(flag: boolean = true) { //上/下轮切换
+        function changeRound(flag: boolean = true) { //上/下轮切换x
             let idx = 1, target;
             scheduleInfo.rounds.find((item, i, arr) => {
                 if (item.current) {

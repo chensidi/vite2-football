@@ -1,75 +1,20 @@
 <template>
-    <div>
-        <div class="bg-info">
-            <van-icon name="arrow-left" class="back" @click="back" />
-            <div class="head">
-                <div class="head-img">
-                    <img :src="bgInfo.personImgUrl" alt="">
-                    <img class="team-logo" :src="bgInfo.clubImgUrl" alt="">
-                </div>
-                <h4>{{ bgInfo.name }}</h4>
-                <p>{{ bgInfo.enName }}</p>
-                <p>
-                    身   高：{{ bgInfo.height }} / 体   重：{{ bgInfo.weight }} / {{ bgInfo.country }} <img class="country-logo" :src="bgInfo.countryImgUrl" alt="">
-                </p>
-                <div class="bottom-info">
-                    <span class="van-hairline--right">{{ bgInfo.age }}</span>
-                    <span>{{ bgInfo.club }} / {{ bgInfo.number }}</span>
-                    <span class="van-hairline--left">{{ bgInfo.position }} / {{ bgInfo.useFoot }}</span>
-                </div>
-            </div>
-        </div>
+    <div v-cloak>
+        <PersonBg :bgInfo="bgInfo" />
         <div>
-            <div class="charts" id="charts">
-            </div>
-            <van-grid :column-num="2" class="my-grid">
-                <van-grid-item>
-                    <span>惯用脚</span>
-                    <img :src="skillInfo.useFootImg" alt="">
-                </van-grid-item>
-                <van-grid-item>
-                    <span>
-                        国际声望
-                    </span>
-                    <van-rate
-                        v-model="skillInfo.countryKnown"
-                        :size="20"
-                        color="#ffd21e"
-                        void-icon="star"
-                        void-color="#eee"
-                    />
-                </van-grid-item>
-                <van-grid-item>
-                    <span>逆足能力</span>
-                    <van-rate
-                        v-model="skillInfo.uselessFoot"
-                        :size="20"
-                        color="#ffd21e"
-                        void-icon="star"
-                        void-color="#eee"
-                    />
-                </van-grid-item>
-                <van-grid-item>
-                    <span>花式技巧</span>
-                    <van-rate
-                        v-model="skillInfo.showSkill"
-                        :size="20"
-                        color="#ffd21e"
-                        void-icon="star"
-                        void-color="#eee"
-                    />
-                </van-grid-item>
-            </van-grid>
+            <h3 class="average">综合能力 <span>{{ bgInfo.average }}</span></h3>
+            <PersonChart :chartInfo="chartInfo" />
+            <GradInfo :skillInfo="skillInfo" />
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import * as echarts from 'echarts';
+import { defineComponent, reactive, defineAsyncComponent, Ref, ref } from 'vue';
+import { useRoute } from 'vue-router';
 
 import personApi from '@/api/person';
+import { UILoading, UILoaded } from '@/utils/ui';
 
 interface bgInfoShape {
     name?: string,
@@ -85,6 +30,7 @@ interface bgInfoShape {
     number?: string,
     position?: string,
     useFoot?: string
+    average?: string
 }
 
 interface skillShap {
@@ -95,14 +41,19 @@ interface skillShap {
 }
 
 export default defineComponent({
+    components: {
+        PersonBg: defineAsyncComponent(() => import('./components/Bg.vue')),
+        PersonChart: defineAsyncComponent(() => import('./components/Chart.vue')),
+        GradInfo: defineAsyncComponent(() => import('./components/GradInfo.vue'))
+    },
     setup() {
-
         const { params: {id} } = useRoute();
-        const { back } = useRouter();
 
         const bgInfo: bgInfoShape = reactive({}); //背景信息
         const skillInfo:skillShap = reactive({}); //技巧能力
+        const chartInfo: Ref<any> = ref([]);
         const getPersonInfo = async () => {
+            UILoading();
             const res = await personApi.getPersonInfo(id as string);
             console.log(res);
             bgInfo.name = res.basicInfo.name;
@@ -118,174 +69,36 @@ export default defineComponent({
             bgInfo.number = res.basicInfo.otherInfo.number;
             bgInfo.position = res.basicInfo.otherInfo.position;
             bgInfo.useFoot = res.basicInfo.otherInfo.useFoot;
+            bgInfo.average = res.basicInfo.average;
 
             skillInfo.useFootImg = res.desc.useFootImg;
             skillInfo.showSkill = res.desc.showSkill;
             skillInfo.uselessFoot = res.desc.uselessFoot;
             skillInfo.countryKnown = res.desc.countryKnown;
-            drawCharts(res.chartInfo);
-        }
 
-        function drawCharts(chartInfo: Array<any>) { //球员能力值雷达图
-            var chartDom = document.getElementById('charts');
-            var myChart = echarts.init(chartDom as HTMLElement);
-            var option;
-
-            let indicator = chartInfo.map(item => {
-                return {text: {label: item.label, value: Number(item.value)}, max: 100}
-            })
-            let values = chartInfo.map(item => item.value);
-            option = {
-                backgroundColor: '#fff',
-                radar: [
-                    {
-                        indicator: indicator,
-                        name: {
-                            formatter: (val: any) => val.label + val.value,
-                            textStyle: {
-                                color: '#fff',
-                                backgroundColor: '#f40',
-                                borderRadius: 3,
-                                padding: [3, 5]
-                            }
-                        },
-                        center: ['50%', '50%'],
-                        radius: 80
-                    }
-                ],
-                series: [
-                    {
-                        type: 'radar',
-                        tooltip: {
-                            trigger: 'item'
-                        },
-                        areaStyle: {
-                            color: '#5fccff'
-                        },
-                        itemStyle: {     //此属性的颜色和下面areaStyle属性的颜色都设置成相同色即可实现
-                            color: '#5fccff',
-                            borderColor: '#5fccff',
-                            borderWidth: 0,
-                        },
-                        emphasis: {
-                            borderWidth: 50
-                        },
-                        axisLine: {     //配置雷达图的射线样式颜色
-                            lineStyle: {
-                                color: '#000',
-                            },
-                        },
-                        data: [
-                            {
-                                value: values,
-                                name: '能力值'
-                            }
-                        ]
-                    },
-                ],
-                /* axisLine: { // (圆内的几条直线)坐标轴轴线相关设置
-                    lineStyle: {
-                        color: '#fff',
-                        // 坐标轴线线的颜色。
-                        width: 1,
-                        // 坐标轴线线宽。
-                        type: 'solid',
-                        // 坐标轴线线的类型。
-                    }
-                } */
-            }
-            option && myChart.setOption(option);
+            chartInfo.value = res.chartInfo;
+            UILoaded(500);
         }
 
         getPersonInfo();
 
         return {
             bgInfo,
-            back,
-            skillInfo
+            skillInfo,
+            chartInfo
         }
     },
 })
 </script>
 
 <style lang="scss" scoped>
-    .bg-info {
-        position: relative;
-        background: $green;
-        color: $gray2;
-        font-size: 12px;
-        padding: 20px 10px 10px;
-        .back {
-            position: absolute;
-            left: 5px;
-            top:10px;
-            color: #fff;
-            font-size: 18px;
-        }
-        .head {
-            text-align: center;
-            .head-img {
-                width: 50px;
-                height: 50px;
-                display: block;
-                margin: auto;
-                position: relative;
-                img {
-                    width: 100%;
-                    border-radius: 50%;
-                    &.team-logo {
-                        position: absolute;
-                        width: 18px;
-                        height: 18px;
-                        bottom: 0px;
-                        right: -5px;
-                    }
-                }
-            }
-            h4 {
-                font-size: 14px;
-                line-height: 2;
-                margin-top: 5px;
-            }
-            p {
-                font-size: 12px;
-                color: $gray2;
-                line-height: 2;
-            }
-            .country-logo {
-                width: 20px;
-                vertical-align: middle;
-            }
-            .bottom-info {
-                display: flex;
-                margin: 10px 0;
-                span {
-                    flex: 1;
-                    &:nth-child(2) {
-                        flex: 2;
-                    }
-                }
-            }
-        }
-    }
-
-    .charts {
-        width: 100%;
-        height: 250px;
-    }
-
-    .my-grid {
-        font-size: 14px;
-        img {
-            width: 30%;
-        }
+    .average {
+        text-align: center;
+        padding: 10px 0;
+        font-weight: 600;
+        font-size: 20px;
         span {
-            color: $black1;
-            position: absolute;
-            top: 0;
-        }
-        & :deep .van-grid-item__content {
-            padding: 20px 8px;
+            color: $red;
         }
     }
 </style>
