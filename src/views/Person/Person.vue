@@ -1,11 +1,39 @@
 <template>
     <div v-cloak>
         <PersonBg :bgInfo="bgInfo" />
-        <div>
-            <h3 class="average">综合能力 <span>{{ bgInfo.average }}</span></h3>
-            <PersonChart :chartInfo="chartInfo" />
-            <GradInfo :skillInfo="skillInfo" />
-        </div>
+        <van-tabs v-model:active="active">
+            <van-tab title="数据">
+                <template v-for="(match, i) of matchData.slice(1)" :key="i">
+                <div class="data-card">
+                    <div class="card-tt">
+                        <time>{{ match[0] }}</time>
+                        <span>{{ match[1] }}</span>
+                    </div>
+                </div>
+                <table class="cards-tb" >
+                    <thead>
+                        <tr>
+                            <th v-for="hd of matchData[0].slice(2)" :key="i + hd">{{ hd }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td v-for="dt of match.slice(2)" :key="dt + Math.random()">
+                                {{ dt }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                </template>
+            </van-tab>
+            <van-tab title="能力值">
+                <div>
+                    <h3 class="average">综合能力 <span>{{ bgInfo.average }}</span></h3>
+                    <PersonChart :chartInfo="chartInfo" />
+                    <GradInfo :skillInfo="skillInfo" />
+                </div>
+            </van-tab>
+        </van-tabs>
     </div>
 </template>
 
@@ -52,6 +80,7 @@ export default defineComponent({
         const bgInfo: bgInfoShape = reactive({}); //背景信息
         const skillInfo:skillShap = reactive({}); //技巧能力
         const chartInfo: Ref<any> = ref([]);
+        const matchData: Ref<any> = ref([]);
         const getPersonInfo = async () => {
             UILoading();
             const res = await personApi.getPersonInfo(id as string);
@@ -77,15 +106,20 @@ export default defineComponent({
             skillInfo.countryKnown = res.desc.countryKnown;
 
             chartInfo.value = res.chartInfo;
+            matchData.value = res.matchData;
             UILoaded(500);
         }
 
         getPersonInfo();
 
+        const active = ref(1);
+
         return {
             bgInfo,
             skillInfo,
-            chartInfo
+            chartInfo,
+            active,
+            matchData
         }
     },
 })
@@ -100,5 +134,30 @@ export default defineComponent({
         span {
             color: $red;
         }
+    }
+
+    .data-card {
+        .card-tt {
+            background: $gray2;
+            color: $black1;
+            width: 100%;
+            font-size: 12px;
+            padding: 5px 10px;
+            overflow: hidden;
+            time {
+                float: left;
+            }
+            span {
+                float: right;
+            }
+        }
+    }
+
+    .cards-tb {
+        width: 100%;
+        font-size: 12px;
+        text-align: center;
+        padding: 10px 0;
+        color: $black1;
     }
 </style>
