@@ -1,30 +1,9 @@
 <template>
     <div v-cloak>
         <PersonBg :bgInfo="bgInfo" />
-        <van-tabs v-model:active="active">
+        <van-tabs v-model:active="active" sticky>
             <van-tab title="数据">
-                <template v-for="(match, i) of matchData.slice(1)" :key="i">
-                <div class="data-card">
-                    <div class="card-tt">
-                        <time>{{ match[0] }}</time>
-                        <span>{{ match[1] }}</span>
-                    </div>
-                </div>
-                <table class="cards-tb" >
-                    <thead>
-                        <tr>
-                            <th v-for="hd of matchData[0].slice(2)" :key="i + hd">{{ hd }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td v-for="dt of match.slice(2)" :key="dt + Math.random()">
-                                {{ dt }}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                </template>
+                <DataCard :matchData="matchData" />
             </van-tab>
             <van-tab title="能力值">
                 <div>
@@ -32,6 +11,9 @@
                     <PersonChart :chartInfo="chartInfo" />
                     <GradInfo :skillInfo="skillInfo" />
                 </div>
+            </van-tab>
+            <van-tab title="荣誉">
+                <HornorGrid :hornorData="hornorData" />
             </van-tab>
         </van-tabs>
     </div>
@@ -72,7 +54,9 @@ export default defineComponent({
     components: {
         PersonBg: defineAsyncComponent(() => import('./components/Bg.vue')),
         PersonChart: defineAsyncComponent(() => import('./components/Chart.vue')),
-        GradInfo: defineAsyncComponent(() => import('./components/GradInfo.vue'))
+        GradInfo: defineAsyncComponent(() => import('./components/GradInfo.vue')),
+        HornorGrid: defineAsyncComponent(() => import('./components/HornorGrid.vue')),
+        DataCard: defineAsyncComponent(() => import('./components/DataCard.vue'))
     },
     setup() {
         const { params: {id} } = useRoute();
@@ -81,6 +65,7 @@ export default defineComponent({
         const skillInfo:skillShap = reactive({}); //技巧能力
         const chartInfo: Ref<any> = ref([]);
         const matchData: Ref<any> = ref([]);
+        const hornorData: Ref<any> = ref([]);
         const getPersonInfo = async () => {
             UILoading();
             const res = await personApi.getPersonInfo(id as string);
@@ -107,6 +92,7 @@ export default defineComponent({
 
             chartInfo.value = res.chartInfo;
             matchData.value = res.matchData;
+            hornorData.value = res.hornorData;
             UILoaded(500);
         }
 
@@ -119,7 +105,8 @@ export default defineComponent({
             skillInfo,
             chartInfo,
             active,
-            matchData
+            matchData,
+            hornorData
         }
     },
 })
@@ -134,30 +121,5 @@ export default defineComponent({
         span {
             color: $red;
         }
-    }
-
-    .data-card {
-        .card-tt {
-            background: $gray2;
-            color: $black1;
-            width: 100%;
-            font-size: 12px;
-            padding: 5px 10px;
-            overflow: hidden;
-            time {
-                float: left;
-            }
-            span {
-                float: right;
-            }
-        }
-    }
-
-    .cards-tb {
-        width: 100%;
-        font-size: 12px;
-        text-align: center;
-        padding: 10px 0;
-        color: $black1;
     }
 </style>

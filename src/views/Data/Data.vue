@@ -130,10 +130,7 @@ export default defineComponent({
         onBeforeRouteLeave(() => {key = true})
         //联赛改变
         function leagueChange(name: string | number, title: string) {
-            if (key) {
-                key = false;
-                return;
-            }
+            
             UILoading();
             leagueInit(name);
             UILoaded(500);
@@ -152,10 +149,7 @@ export default defineComponent({
         const curType: Ref<string|number> = ref('0'); //当前排行数据类别
         function typeChange(name: string | number, title: string) {
             console.log(2)
-            if (key) {
-                key = false;
-                return;
-            }
+            
             curType.value = name;
             curCateIdx.value = 0;
             judgeType();
