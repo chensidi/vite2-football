@@ -15,6 +15,7 @@
         @update="videoObj.showVideo = $event"
         :videoInfo="videoObj" 
     />
+    <more-nav @change="onLeagueChange" />
 </template>
 
 <script lang="ts">
@@ -27,13 +28,14 @@ export default defineComponent({
     name: 'Live',
     components: {
         'video-cover': defineAsyncComponent(() => import('./components/VideoCover.vue')),
-        'video-player': defineAsyncComponent(() => import('./components/VideoPlay.vue'))
+        'video-player': defineAsyncComponent(() => import('./components/VideoPlay.vue')),
+        'more-nav': defineAsyncComponent(() => import('./components/MoreNav.vue')),
     },
     setup() {
         const lists: Ref<Array<any>> = ref([]);
 
-        const getLeagueVideo = async () => {
-            const res = await videoApi.getLeagueVideo({league: 'England', after: loadObj.after});
+        const getLeagueVideo = async (league = 'England') => {
+            const res = await videoApi.getLeagueVideo({league, after: loadObj.after});
             loadObj.after = res.min;
             setTimeout(() => {
                 lists.value =  lists.value.concat(res.articles);
@@ -63,13 +65,22 @@ export default defineComponent({
             videoObj.cover = item.cover.pic;
             videoObj.url = item.video_info.video_src
         }
+
+        function onLeagueChange(val: string) { //视频类别变化
+            console.log(val);
+            loadObj.after = '';
+            loadObj.before = '';
+            lists.value = [];
+            getLeagueVideo(val);
+        }
         
         return {
             lists,
             loadObj,
             onLoad,
             videoObj,
-            playVideo
+            playVideo,
+            onLeagueChange
         }
     },
 })
@@ -96,4 +107,5 @@ export default defineComponent({
         z-index: 100;
         background: #000;
     }
+
 </style>
