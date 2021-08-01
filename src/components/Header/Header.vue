@@ -1,6 +1,6 @@
 <template>
     <div class="download-header">
-        <img src="https://static1.dongqiudi.com/m/dist/img/download-logo.8b6339b.jpg" alt="">
+        <img src="/logo.png" alt="">
     </div>
 </template>
 

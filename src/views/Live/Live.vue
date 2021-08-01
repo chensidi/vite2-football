@@ -5,6 +5,7 @@
             :finished="loadObj.finished"
             finished-text="没有更多了"
             @load="onLoad"
+            ref="listRef"
         >
             <div class="video-list">
                 <video-cover @click.native="playVideo(item)" v-for="item of lists" :key="item.id" :cover="item" />
@@ -15,7 +16,7 @@
         @update="videoObj.showVideo = $event"
         :videoInfo="videoObj" 
     />
-    <more-nav @change="onLeagueChange" />
+    <more-nav @changes="onLeagueChange" />
 </template>
 
 <script lang="ts">
@@ -47,11 +48,13 @@ export default defineComponent({
             loading: false,
             finished: false,
             after: '',
-            before: ''
+            before: '',
+            league: 'England'
         })
 
+        const listRef = ref();
         function onLoad() {
-            getLeagueVideo();
+            getLeagueVideo(loadObj.league);
         }
 
         const videoObj = reactive({ //视频播放相关
@@ -66,12 +69,14 @@ export default defineComponent({
             videoObj.url = item.video_info.video_src
         }
 
-        function onLeagueChange(val: string) { //视频类别变化
-            console.log(val);
+        function onLeagueChange(val: string): void { //视频类别变化
             loadObj.after = '';
             loadObj.before = '';
+            loadObj.loading = true;
+            window.scrollTo(0, 0);
             lists.value = [];
             getLeagueVideo(val);
+            loadObj.league = val;
         }
         
         return {

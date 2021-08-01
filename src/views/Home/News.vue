@@ -6,6 +6,7 @@
             finished-text="没有更多了"
             @load="onLoad"
         >
+            <Banner :list="lists.slice(0, 5)" />
             <div class="news-list">
                 <news-item
                     v-for="item of lists"
@@ -35,6 +36,7 @@ import { List, PullRefresh } from 'vant'
 import NewsItem from './NewsItem.vue'
 import homeApi from '@/api/home'
 import { pageData } from '@/api/home'
+import Banner from '@/components/Banner/Banner.vue';
 
 interface NewsItemShape {
     id: number,
@@ -53,6 +55,7 @@ export default defineComponent({
         'news-item': NewsItem,
         [List.name]: List,
         [PullRefresh.name]: PullRefresh,
+        'Banner': Banner
     },
     setup() {
         const lists = ref<Array<NewsItemShape>>([])

@@ -71,10 +71,9 @@ export default defineComponent({
         });
 
         const onConfirm = (value: {text: string, val: string}) => {
-            console.log(value)
             state.value = value.val;
             state.showPicker = false;
-            emit('change', value.val);
+            emit('changes', value.val);
         };
 
         return {
