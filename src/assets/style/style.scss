@@ -16,6 +16,13 @@ $sky: #1d9ff9;
 
 $red: #f12b2b;
 
+@mixin flex($jc: space-between, $ai: center, $wrap: wrap) {
+    display: flex;
+    align-items: $ai;
+    justify-content: $jc;
+    flex-wrap: $wrap;
+}
+
 
 * {
     box-sizing: border-box;
@@ -72,4 +79,16 @@ img.hide {
 img.loaded {
     opacity: 1;
     transition: opacity .3s linear;
+}
+
+.txt-l {
+    text-align: left;
+}
+
+.txt-c {
+    text-align: center;
+}
+
+.txt-r {
+    text-align: right;
 }

@@ -12,7 +12,9 @@
                     <GradInfo :skillInfo="skillInfo" />
                 </div>
             </van-tab>
-            <van-tab title="荣誉">
+            <van-tab title="资料">
+                <Transfer :list="transfer" />
+                <Injured :list="injured" />
                 <HornorGrid :hornorData="hornorData" />
             </van-tab>
         </van-tabs>
@@ -56,7 +58,9 @@ export default defineComponent({
         PersonChart: defineAsyncComponent(() => import('./components/Chart.vue')),
         GradInfo: defineAsyncComponent(() => import('./components/GradInfo.vue')),
         HornorGrid: defineAsyncComponent(() => import('./components/HornorGrid.vue')),
-        DataCard: defineAsyncComponent(() => import('./components/DataCard.vue'))
+        DataCard: defineAsyncComponent(() => import('./components/DataCard.vue')),
+        Transfer: defineAsyncComponent(() => import('./components/Transfer.vue')),
+        Injured: defineAsyncComponent(() => import('./components/Injured.vue')),
     },
     setup() {
         const { params: {id} } = useRoute();
@@ -66,6 +70,8 @@ export default defineComponent({
         const chartInfo: Ref<any> = ref([]);
         const matchData: Ref<any> = ref([]);
         const hornorData: Ref<any> = ref([]);
+        const transfer: Ref<any> = ref([]);
+        const injured: Ref<any> = ref([]);
         const getPersonInfo = async () => {
             UILoading();
             const res = await personApi.getPersonInfo(id as string);
@@ -93,6 +99,8 @@ export default defineComponent({
             chartInfo.value = res.chartInfo;
             matchData.value = res.matchData;
             hornorData.value = res.hornorData;
+            transfer.value = res.transfer;
+            injured.value = res.injured;
             UILoaded(500);
         }
 
@@ -106,7 +114,9 @@ export default defineComponent({
             chartInfo,
             active,
             matchData,
-            hornorData
+            hornorData,
+            transfer,
+            injured,
         }
     },
 })
@@ -122,4 +132,6 @@ export default defineComponent({
             color: $red;
         }
     }
+
+    
 </style>

@@ -1,6 +1,6 @@
 <template>
     <div class="download-header">
-        <img src="/logo.png" alt="">
+        <img src="/logo2.png" alt="">
     </div>
 </template>
 

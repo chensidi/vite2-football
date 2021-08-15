@@ -1,5 +1,6 @@
 <template>
   <div class="hornor-block">
+    <h4 class="tit">荣誉记录</h4>
     <template v-for="hornor of hornorData" :key="hornor.name">
       <h3>
         {{ hornor.name }} <em class="num">{{ hornor.years.length }}</em> 个
@@ -76,5 +77,14 @@ export default defineComponent({
     }
     border-bottom: 4px solid $gray2;
   }
+}
+
+.tit {
+  background: #e9e9e9;
+  color: #555;
+  width: 100%;
+  font-size: 0.6rem;
+  padding: 0.25rem 0.5rem;
+  overflow: hidden;
 }
 </style>
