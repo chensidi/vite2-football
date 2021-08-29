@@ -45,7 +45,7 @@ export default defineComponent({
         function touchend() {
             key = false;
             endStamp = Date.now();
-            if (endStamp - startStamp < 100) {
+            if (endStamp - startStamp < 200) {
                 state.showPicker = true;
             }
         }

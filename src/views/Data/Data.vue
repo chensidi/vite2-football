@@ -1,13 +1,13 @@
 <template>
     <keep-alive>
     <div class="content">
-        <van-tabs @change="leagueChange">
+        <van-tabs @change="leagueChange" v-model:active="active">
             <van-tab :name="item.competition_id" :title="item.label" v-for="item of rankings" :key="item.competition_id">
             </van-tab>
         </van-tabs>
         <div class="tabs-hd">
             <span class="choose-season" @click="seasonObj.show = true ">{{ seasonObj.seasonName }} <van-icon name="arrow-down" /></span>
-            <van-tabs type="card" class="my-data-tabs" @change="typeChange">
+            <van-tabs type="card" class="my-data-tabs" @change="typeChange" v-model:active="subActive">
                 <van-tab name="0" title="积分"></van-tab>
                 <van-tab name="1" title="球员榜"></van-tab>
                 <van-tab name="2" title="球队榜"></van-tab>
@@ -120,6 +120,7 @@ export default defineComponent({
         //获取积分
         const standing = ref([] as any);
         const getStanding = async (seasonId: string | number) => {
+            
             UILoading();
             const res = await rankingsApi.getStanding(seasonId);
             standing.value = res?.content?.rounds[0]?.content?.data;
@@ -141,6 +142,7 @@ export default defineComponent({
             console.log(0)
             getSeasons(competitionId).then(res => {
                 // 判断联赛类型 积分？球队榜？球员榜？
+                
                 judgeType();
             })
         }
@@ -148,10 +150,9 @@ export default defineComponent({
         //数据排行tab切换
         const curType: Ref<string|number> = ref('0'); //当前排行数据类别
         function typeChange(name: string | number, title: string) {
-            console.log(2)
-            
             curType.value = name;
             curCateIdx.value = 0;
+            
             judgeType();
         }
 
@@ -169,6 +170,7 @@ export default defineComponent({
         })
         const getRankingByType = async (type: string = 'person') => {
             rankingList.list = [];
+            
             UILoading();
             const res = await rankingsApi.getRankingByType(playerCates.value[curCateIdx.value].type, seasonObj.seasonId, type +'_ranking');
             rankingList.list = res.content.data;
@@ -182,6 +184,7 @@ export default defineComponent({
         }
 
         function judgeType() { //判断应该获取哪个类型的数据
+            
             switch (curType.value) {
                 case '0':
                     return getStanding(seasonObj.seasonId);
@@ -270,7 +273,8 @@ export default defineComponent({
             })
         }
 
-        // leagueInit(rankings[0].competition_id);
+        const active: Ref<string|number> = ref('');
+        const subActive: Ref<string|number> = ref('');
 
         return {
             rankings,
@@ -289,6 +293,8 @@ export default defineComponent({
             hasRound,
             changeRound,
             confirmRound,
+            active,
+            subActive,
         }
     },
 })
